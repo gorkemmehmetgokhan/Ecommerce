@@ -1,0 +1,45 @@
+﻿@model Ecommerce.Entity.Invoice
+
+@{
+    ViewBag.Title = "Pay";
+    Layout = "~/Views/Shared/_DefaultLayout.cshtml";
+}
+
+
+@using (Html.BeginForm())
+{
+<section id="cart_items">
+    <div class="review-payment">
+        <h2>Fatura</h2>
+    </div>
+
+    <div class="table-responsive cart_info">
+        <table class="table table-condensed">
+            <thead>
+                <tr class="cart_menu">
+                    <td class="image">Sipariş / Fatura Adresi</td>                   
+                    <td class="description">Ödeme Şekli</td>
+                    <td></td>
+                </tr>
+            </thead>
+            <tbody>
+                    <tr>
+                        <td class="cart_description">
+                            @Html.DropDownList("AddressTypes", ViewBag.Skills as SelectList)
+                            @Html.ValidationMessageFor(model => model.AddressId)
+                        </td>                        
+                        <td class="cart_description">
+                            @Html.DropDownList("PaymentTypes", ViewBag.Skills as SelectList)
+                            @Html.ValidationMessageFor(model => model.PaymentTypeId)
+                        </td>
+                        <td class="cart_description">                         
+                                <button type="submit" class="btn btn-fefault cart">                                    
+                                   Satın Al
+                                </button>
+                        </td>                     
+                    </tr>                            
+            </tbody>
+        </table>
+    </div>
+</section>
+}

@@ -1,0 +1,10 @@
+﻿@using Ecommerce.Entity
+@model  User
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_ProfileLayout.cshtml";
+}
+
+<form method="get" action="~/Profile/Index">
+    <input name="UserId" value="@Model.UserId" class="hide" />
+</form>

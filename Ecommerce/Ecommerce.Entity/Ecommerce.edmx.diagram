@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="67c0cceb1809441d8d65a55aeef06f42" Name="Diagram1">
+        <EntityTypeShape EntityType="DB_EcommerceModel.Brand" Width="1.5" PointX="0.75" PointY="3.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="DB_EcommerceModel.Category" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DB_EcommerceModel.Comment" Width="1.5" PointX="5.25" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DB_EcommerceModel.Gender" Width="1.5" PointX="2.75" PointY="7.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="DB_EcommerceModel.Invoice" Width="1.5" PointX="8.25" PointY="8.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="DB_EcommerceModel.InvoiceAddress" Width="1.5" PointX="10.75" PointY="1.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="DB_EcommerceModel.Order" Width="1.5" PointX="6" PointY="8.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DB_EcommerceModel.OrderDetail" Width="1.5" PointX="8.25" PointY="3.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="DB_EcommerceModel.Payment" Width="1.5" PointX="6" PointY="12.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="DB_EcommerceModel.Product" Width="1.5" PointX="3" PointY="3.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="DB_EcommerceModel.ProductMedia" Width="1.5" PointX="10.75" PointY="4.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="DB_EcommerceModel.Shipper" Width="1.5" PointX="10.75" PointY="7.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="DB_EcommerceModel.Slider" Width="1.5" PointX="10.75" PointY="10.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="DB_EcommerceModel.Supplier" Width="1.5" PointX="0.75" PointY="7.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="DB_EcommerceModel.sysdiagram" Width="1.5" PointX="12.75" PointY="1.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="DB_EcommerceModel.User" Width="1.5" PointX="3" PointY="10.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="DB_EcommerceModel.UserRole" Width="1.5" PointX="0.75" PointY="11.25" IsExpanded="true" />
+        <AssociationConnector Association="DB_EcommerceModel.FK_Product_Brand" ManuallyRouted="false" />
+        <AssociationConnector Association="DB_EcommerceModel.FK_Product_Category" ManuallyRouted="false" />
+        <AssociationConnector Association="DB_EcommerceModel.FK_Comment_Product" ManuallyRouted="false" />
+        <AssociationConnector Association="DB_EcommerceModel.FK_Comment_User" ManuallyRouted="false" />
+        <AssociationConnector Association="DB_EcommerceModel.FK_Invoice_Order" ManuallyRouted="false" />
+        <AssociationConnector Association="DB_EcommerceModel.FK_Invoice_Payment" ManuallyRouted="false" />
+        <AssociationConnector Association="DB_EcommerceModel.FK_Order_User" ManuallyRouted="false" />
+        <AssociationConnector Association="DB_EcommerceModel.FK_OrderDetail_Order" ManuallyRouted="false" />
+        <AssociationConnector Association="DB_EcommerceModel.FK_OrderDetail_Product" ManuallyRouted="false" />
+        <AssociationConnector Association="DB_EcommerceModel.FK_Product_Supplier" ManuallyRouted="false" />
+        <AssociationConnector Association="DB_EcommerceModel.FK_User_UserRole" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

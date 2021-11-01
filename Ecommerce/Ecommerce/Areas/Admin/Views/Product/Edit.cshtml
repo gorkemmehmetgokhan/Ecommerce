@@ -1,0 +1,78 @@
+﻿@using Ecommerce.Areas.Admin.Models.ViewModel
+@using Ecommerce.Entity
+@model ProductViewModel
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+
+@using (Html.BeginForm("Edit", "Product", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+
+    <fieldset>
+        <legend>Product</legend>
+        @Html.HiddenFor(model => model.Product.ProductId)
+        <div>
+            @Html.DisplayNameFor(model => model.Product.ProductName)
+        </div>
+        <div>
+            @Html.EditorFor(model => model.Product.ProductName)
+        </div><hr />
+        <div>
+            @Html.DisplayNameFor(model => model.Product.Description)
+        </div>
+        <div>
+            @Html.EditorFor(model => model.Product.Description)
+        </div><hr />
+        <div>
+            @Html.DisplayNameFor(model => model.Product.Price)
+        </div>
+        <div>
+            @Html.EditorFor(model => model.Product.Price)
+        </div><hr />
+        <div>
+            @Html.DisplayNameFor(model => model.Product.Stock)
+        </div>
+        <div>
+            @Html.EditorFor(model => model.Product.Stock)
+        </div><hr />
+        @*<label for="file1">Picture 1:</label>
+        <input type="file" name="files" id="file1" />
+
+        <label for="file2">Picture 2:</label>
+        <input type="file" name="files" id="file2" />
+
+        <label for="file3">Picture 3:</label>
+        <input type="file" name="files" id="file3" />*@
+        <hr />
+        <div>
+            @Html.DisplayNameFor(model => model.Product.Category)
+        </div>
+        <div>
+            @Html.DropDownListFor(model => model.Product.CategoryId, Model.CategoryList)
+        </div><br />
+        <div>
+            @Html.DisplayNameFor(model => model.Product.Supplier)
+        </div>
+        <div>
+            @Html.DropDownListFor(model => model.Product.SupplierId, Model.SuppList)
+        </div><br />
+        <div>
+            @Html.DisplayNameFor(model => model.Product.Brand)
+        </div>
+        <div>
+            @Html.DropDownListFor(model => model.Product.BrandId, Model.BrandList)
+        </div><hr />
+        <div>
+            @Html.DisplayNameFor(model => model.Product.GenderId)
+        </div>
+        <div>
+            @Html.DropDownListFor(model => model.Product.GenderId, Model.GenderList)
+        </div><hr />
+        <div>
+            <input type="submit" class="btn btn-success" value="Edit" />
+        </div>
+    </fieldset>
+
+}

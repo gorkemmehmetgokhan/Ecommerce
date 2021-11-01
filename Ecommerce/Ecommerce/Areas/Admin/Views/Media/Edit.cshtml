@@ -1,0 +1,43 @@
+﻿@using Ecommerce.Entity
+@model Ecommerce.Entity.ProductMedia
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+@using (Html.BeginForm("Edit", "Media", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken();
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>Photo</legend>
+        @Html.HiddenFor(model => model.ProductMediaId)
+        @Html.HiddenFor(model => model.ProductId)
+        @Html.HiddenFor(model => model.Photo)
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.ProductId)
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(model => model.ProductId, new{ disabled = "disabled", @readonly = "readonly" })
+        </div>
+        <hr />
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Photo)
+        </div>
+        <div class="editor-field">
+            <img src="~/Images/@Model.Photo" width="100" height="100" /><br /><br />
+            <input type="file" name="PhotoPath" id="PhotoPath" />
+            @Html.ValidationMessageFor(model => model.Photo)
+        </div>
+        <hr />
+       
+        <div>
+            <input type="submit" class="btn btn-success" value="Edit" />
+        </div>         
+    </fieldset>
+}
+
+

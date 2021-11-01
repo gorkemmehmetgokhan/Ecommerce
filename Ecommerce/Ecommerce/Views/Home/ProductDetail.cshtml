@@ -1,0 +1,250 @@
+﻿@using Ecommerce.Entity
+@using Ecommerce.Repository
+@model Product
+
+@{
+    ViewBag.Title = "ProductDetail";
+    Layout = "~/Views/Shared/_HomeLayout.cshtml";
+}
+
+@{
+    MediaRepository mRep = new MediaRepository();
+      
+    var pic1 = mRep.List().ProcessResult.Where(t => t.ProductId == Model.ProductId).First().Photo;
+    var pic2 = mRep.List().ProcessResult.Where(t => t.ProductId == Model.ProductId).Skip(1).First().Photo;
+    var pic3 = mRep.List().ProcessResult.Where(t => t.ProductId == Model.ProductId).Skip(2).First().Photo;
+}
+
+<div>
+    <div class="product-details">
+        <!--product-details-->
+        <div class="col-sm-5">
+            <div class="view-product">
+
+                @if (pic1 == 0.ToString() && pic2 == 0.ToString() && pic3 == 0.ToString())
+                {
+                    <img src="/Images/urungorseli.jpg" />
+                }
+                else if (pic2 == 0.ToString() && pic3 == 0.ToString())
+                {
+                    <a href=""><img src="~/Images/@pic1" alt=""></a>
+                }
+                else if (pic3 == 0.ToString())
+                {
+                    <div id="similar-product" class="carousel slide" data-ride="carousel">
+                        <div class="carousel-inner">
+                            <div class="item active">
+                                <a href=""><img src="~/Images/@pic1" alt=""></a>
+                            </div>
+                            <div class="item">
+                                <a href=""><img src="~/Images/@pic2" alt=""></a>
+                            </div>
+                        </div>
+                    </div>
+                }
+                else if (pic2 == 0.ToString())
+                {
+                    <div id="similar-product" class="carousel slide" data-ride="carousel">
+                        <div class="carousel-inner">
+                            <div class="item active">
+                                <a href=""><img src="~/Images/@pic1" alt=""></a>
+                            </div>
+                            <div class="item">
+                                <a href=""><img src="~/Images/@pic3" alt=""></a>
+                            </div>
+                        </div>
+                    </div>
+                }
+                else if (pic1 == 0.ToString())
+                {
+                    <div id="similar-product" class="carousel slide" data-ride="carousel">
+                        <div class="carousel-inner">
+                            <div class="item active">
+                                <a href=""><img src="~/Images/@pic2" alt=""></a>
+                            </div>
+                            <div class="item">
+                                <a href=""><img src="~/Images/@pic3" alt=""></a>
+                            </div>
+                        </div>
+                    </div>
+                }
+                else if (pic1 == 0.ToString() && pic2 == 0.ToString())
+                {
+                    <div id="similar-product" class="carousel slide" data-ride="carousel">
+                        <div class="carousel-inner">
+                            <div class="item">
+                                <a href=""><img src="~/Images/@pic3" alt=""></a>
+                            </div>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div id="similar-product" class="carousel slide" data-ride="carousel">
+                        <div class="carousel-inner">
+                            <div class="item active">
+                                <a href=""><img src="~/Images/@pic1" alt=""></a>
+                            </div>
+                            <div class="item">
+                                <a href=""><img src="~/Images/@pic2" alt=""></a>
+                            </div>
+                            <div class="item">
+                                <a href=""><img src="~/Images/@pic3" alt=""></a>
+                            </div>
+                        </div>
+                    </div>
+
+                }
+                <a class="left item-control" href="#similar-product" data-slide="prev">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                <a class="right item-control" href="#similar-product" data-slide="next">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+
+        </div>
+        <div class="col-sm-7">
+            <div class="product-information">
+                <!--/product-information-->
+                <h2>@Model.ProductName</h2>
+                <img src="images/product-details/rating.png" alt="" />
+                <span>
+                    <span>@Html.Label(string.Format("{0:#}₺", Model.Price))</span>
+                   
+                    @using (Html.BeginForm("Add", "Order", FormMethod.Post))
+                    {                       
+                        if (Model.Stock > 0)
+                        {
+                            <label>Adet:</label>
+                            <input id="txtQuantity" type="text" name="quantity" value="1" />
+                            <input id="txtQuantity" type="hidden" name="id" value="@Model.ProductId"/>
+                            <button type="submit" class="btn btn-fefault cart" style="float:right;margin-left:125px;margin-top:-55px">
+                                <i class="fa fa-shopping-cart"></i>
+                                Sepete Ekle
+                            </button>
+                        }
+                    }           
+                </span>
+                <p>
+                    <b>
+                        Stokta:
+                    </b>
+                    @if (Model.Stock > 0)
+                    {
+                        <b style="color:darkgreen">Var</b>
+                    }
+                    else
+                    {
+                        <b style="color:red">Yok</b>
+                    }
+                </p>
+                <p>
+                    <b>Marka:</b>
+                    @{
+                        BrandRepository bRep = new BrandRepository();
+                        Brand brand = new Brand();
+                        brand.BrandName = bRep.List().ProcessResult.Where(t => t.BrandId == Model.BrandId).FirstOrDefault().BrandName.ToString();
+                        @brand.BrandName
+                    }
+                </p>
+                <p>
+                    <b>Mağaza:</b>
+                    @Model.Supplier.CompanyName
+                </p>
+            </div><!--/product-information-->
+        </div>
+    </div><!--/product-details-->
+
+    @{
+        DB_EcommerceEntities con = new DB_EcommerceEntities();
+        var commentProduct = con.Comments.Where(t => t.ProductId == Model.ProductId && t.IsApproved == true).Count();
+
+        ProductMedia pm = new ProductMedia();
+        pm.Photo = mRep.List().ProcessResult.Where(t => t.ProductId == Model.ProductId).FirstOrDefault().Photo;
+    }
+
+    <div class="category-tab shop-details-tab">
+        <!--category-tab-->
+        <div class="col-sm-12">
+            <ul class="nav nav-tabs">
+                <li><a href="#details" data-toggle="tab">Ürün Açıklaması</a></li>
+                <li class="active"><a href="#reviews" data-toggle="tab">Yorumlar (@commentProduct)</a></li>
+            </ul>
+        </div>
+        <div class="tab-content">
+            <div class="tab-pane fade" id="details">
+
+                @foreach (var item in mRep.List().ProcessResult.Where(t => t.ProductId == Model.ProductId))
+                {
+                    if (pm.Photo != 0.ToString())
+                    {
+                        <a href=""><img src="~/Images/@item.Photo" alt="" width="400" height="400"></a>
+                    }
+                }
+                <hr />
+                @Model.Description
+
+            </div>
+
+            <div class="tab-pane fade active in" id="reviews">
+                <div class="col-sm-12">
+                    <form>
+                        <input name="ProductId" value="@Model.ProductId" class="hide" />
+                        <input name="UserId" value="@User.Identity.Name" class="hide" />
+                        @{
+                            DB_EcommerceEntities db = new DB_EcommerceEntities();
+
+                            var ProductComment = db.Comments.Join(
+                            db.Users,
+                            comment => comment.UserId,
+                            user => user.UserId,
+                            (comment, user) => new { Comment = comment, User = user }).
+                            Where(x => x.Comment.ProductId == Model.ProductId && x.Comment.IsApproved == true).
+                            OrderByDescending(x => x.Comment.CommentId).ToList();
+
+                            ViewBag.Comment = ProductComment;
+                        }
+
+                        @foreach (var item in ViewBag.Comment)
+                        {
+                            <ul>
+                                <li><a href=""><i class="fa fa-user"></i>@item.User.Fullname</a></li>
+                                <li>
+                                    <a href="">
+                                        <i class="fa fa-clock-o"></i>@item.Comment.PostTime.Hour :
+                                        @if (item.Comment.PostTime.Minute > 9)
+                                        {
+                                            @item.Comment.PostTime.Minute
+                                        }
+                                        else
+                                        {
+                                            <b style="font-weight:400">0</b>@item.Comment.PostTime.Minute
+                                        }
+                                    </a>
+                                </li>
+                                <li><a href=""><i class="fa fa-calendar-o"></i>@item.Comment.PostTime.ToString("MM/dd/yyyy")</a></li>
+                            </ul>
+                            <p>@item.Comment.Text</p>
+
+                            <hr />
+                        }
+                    </form>
+
+                    <p><b>Yorumunu Yaz</b></p>
+
+                    <form method="post" action="~/Home/ProductComment">
+                        <input name="ProductId" value="@Model.ProductId" class="hide" />
+                        <input name="UserId" value="@User.Identity.Name" class="hide" />
+
+                        <textarea name="Text" required></textarea>
+                        <button type="submit" class="btn btn-default pull-right">
+                            Yorum Yap
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div><!--/category-tab-->
+</div>

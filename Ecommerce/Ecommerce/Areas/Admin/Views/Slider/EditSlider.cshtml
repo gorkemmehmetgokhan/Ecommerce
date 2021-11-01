@@ -1,0 +1,43 @@
+﻿@using Ecommerce.Areas.Admin.Models.ViewModel
+@using Ecommerce.Entity
+
+@model SliderViewModel
+@{
+    ViewBag.Title = "Edit Slider";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+@using (Html.BeginForm("EditSlider", "Slider", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <fieldset>
+        <legend>Slider</legend>
+        @Html.HiddenFor(model => model.Slider.SliderId)
+        <div>
+            @Html.DisplayNameFor(model => model.Slider.SliderHeader)
+        </div>
+        <div>
+            @Html.EditorFor(model => model.Slider.SliderHeader, new { required = "required" })
+        </div><hr />
+        <div>
+            @Html.DisplayNameFor(model => model.Slider.Description)
+        </div>
+        <div>
+            @Html.EditorFor(model => model.Slider.Description, new { required = "required" })
+        </div><hr />
+
+        <label for="file1">Image</label>
+        <input type="file" name="PhotoPath" id="photo" />
+
+        <hr />
+        <div>
+            @Html.DisplayNameFor(model => model.Slider.CategoryId)
+        </div>
+        <div>
+            @Html.DropDownListFor(model => model.Slider.CategoryId, Model.CategoryList)
+        </div>
+        <hr />
+        <div>
+            <input type="submit" class="btn btn-success" value="Edit Slider" />
+        </div>
+    </fieldset>
+}

@@ -1,0 +1,51 @@
+﻿
+@using Ecommerce.Entity
+@using Ecommerce.Repository
+@using PagedList.Mvc
+@model PagedList.IPagedList<Ecommerce.Entity.Product>
+
+
+<div class="features_items">
+    <!--features_items-->
+    <h2 class="title text-center">Cinsiyete Göre Ürünler</h2>
+    @foreach (var item in Model)
+    {
+        MediaRepository mRep = new MediaRepository();
+
+        var image = mRep.List().ProcessResult.Where(t => t.ProductId == item.ProductId).First().Photo.ToString();
+
+        <div class="col-sm-3" style="height:400px">
+            <div class="product-image-wrapper">
+                <div class="single-products">
+                    <div class="productinfo text-center">
+                        <a href="~/Home/ProductDetail/@item.ProductId">
+                            <img src="~/Images/@image" alt="" height="175" width="150" /></a>
+
+                            @if (image == 0.ToString())
+                            {
+                                <a href="~/Home/ProductDetail/@item.ProductId"><img src="~/Images/urungorseli.jpg" height="125" width="125" /></a>
+                            }
+                            <h2>@Html.Label(string.Format("{0:#}₺", item.Price))</h2>
+                            <p>@item.ProductName</p>
+                            <a href="~/Order/Add/@item.ProductId?quantity=1" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Sepete Ekle</a>
+</div>                  
+                </div>
+                <div class="choose">
+                    <ul class="nav nav-pills nav-justified">
+                        <li><a href="~/Home/ProductDetail/@item.ProductId"><i class="fa fa-plus-square"></i>Ürün Detayı</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    }
+</div><!--features_items-->
+
+<span style="float:right">
+    @Html.PagedListPager(Model, page => Url.Action("ListByGender", new { page, pageSize = Model.PageSize }))
+</span>
+<br /><br /><br />
+
+
+
+
+

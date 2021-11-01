@@ -1,0 +1,58 @@
+﻿@model Ecommerce.Entity.User
+@{
+    ViewBag.Title = "AddAdmin";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+
+@using (Html.BeginForm("AddAdmin", "User", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+
+<fieldset>
+    <legend>Add Admin</legend>
+    <div class="editor-label">
+        @Html.LabelFor(model => model.Fullname)
+    </div>
+    <div class="editor-field">
+        @Html.EditorFor(model => model.Fullname)
+        @Html.ValidationMessageFor(model => model.Fullname)
+    </div><hr />
+    <div class="editor-label">
+        @Html.LabelFor(model => model.Email)
+    </div>
+    <div class="editor-field">
+        @Html.EditorFor(model => model.Email)
+        @Html.ValidationMessageFor(model => model.Email)
+    </div><hr />
+    <div class="editor-label">
+        @Html.LabelFor(model => model.Password)
+    </div>
+    <div class="editor-field">
+        @Html.EditorFor(model => model.Password)
+        @Html.ValidationMessageFor(model => model.Password)
+    </div><hr />
+    <div class="editor-label">
+        @Html.LabelFor(model => model.Username)
+    </div>
+    <div class="editor-field">
+        @Html.EditorFor(model => model.Username)
+        @Html.ValidationMessageFor(model => model.Username)
+    </div><hr />  
+    <div class="editor-label">
+        @Html.LabelFor(model => model.Gender)
+    </div>
+    <div class="radios">
+        <label for="radio-01">
+            <input name="sampleradio" id="radioMale" value="Male" type="radio" checked /> Erkek
+        </label>
+        <label for="radio-02">
+            <input name="sampleradio" id="radioFemale" value="Female" type="radio" /> Kadın
+        </label>
+    </div>
+    <hr />
+    <div>
+        <input type="submit" class="btn btn-success" value="Add Admin" />
+    </div>
+</fieldset>
+}
+

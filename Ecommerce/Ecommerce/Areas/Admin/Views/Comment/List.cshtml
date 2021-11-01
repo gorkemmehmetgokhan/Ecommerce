@@ -1,0 +1,30 @@
+﻿@using Ecommerce.Entity;
+@model IEnumerable<Comment>
+@{
+    ViewBag.Title = "List of Comments";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<table class="table table-hover">
+    <tr>
+        <th>@Html.DisplayNameFor(t => t.ProductId)</th>
+        <th>@Html.DisplayNameFor(t => t.Text)</th>
+        <th>@Html.DisplayNameFor(t => t.PostTime)</th>
+        <th>@Html.DisplayNameFor(t => t.IsApproved)</th>
+        <th>Edit</th>
+    </tr>
+    @foreach (Comment item in Model)
+    {
+        <tr>
+            <td>@Html.DisplayFor(t => item.ProductId)</td>
+            <td>@Html.DisplayFor(t => item.Text)</td>
+            <td>@Html.DisplayFor(t => item.PostTime)</td>
+            <td>@Html.DisplayFor(t => item.IsApproved)</td>
+            <td>                
+                <a href="~/Admin/Comment/Delete/@item.CommentId" class="btn btn-danger">Delete</a>
+            </td>
+        </tr>
+    }
+</table>
+
+

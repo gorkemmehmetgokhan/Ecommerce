@@ -1,0 +1,118 @@
+﻿@using Ecommerce.Entity
+@using Ecommerce.Repository
+@model IEnumerable<Product>
+
+<div class="features_items">
+    <!--features_items-->
+    <h2 class="title text-center">Son Eklenen Ürünler</h2>
+    @foreach (var item in Model)
+    {
+        MediaRepository mRep = new MediaRepository();
+
+        var image = mRep.List().ProcessResult.Where(t => t.ProductId == item.ProductId).First().Photo.ToString();
+
+        <div class="col-sm-3" style="height:400px">
+            <div class="product-image-wrapper">
+                <div class="single-products">
+                    <div class="productinfo text-center">
+                        <a href="~/Home/ProductDetail/@item.ProductId">
+                            <img src="~/Images/@image" alt="" height="175" width="150" /></a>
+
+                            @if (image == 0.ToString())
+                            {
+                                <a href="~/Home/ProductDetail/@item.ProductId"><img src="~/Images/urungorseli.jpg" height="125" width="125" /></a>
+                            }
+                            <h2>@Html.Label(string.Format("{0:#}₺", item.Price))</h2>
+                            <p>@item.ProductName</p>
+                            <a href="~/Order/Add/@item.ProductId?quantity=1" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Sepete Ekle</a>
+                     </div>                  
+                </div>
+                <div class="choose">
+                    <ul class="nav nav-pills nav-justified">
+                        <li><a href="~/Home/ProductDetail/@item.ProductId"><i class="fa fa-plus-square"></i>Ürün Detayı</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    }
+</div><!--features_items-->
+
+@{
+    CategoryRepository cRep = new CategoryRepository();
+    MediaRepository mr = new MediaRepository();
+    ProductMedia pm = new ProductMedia();
+
+    int[] catNums = { 21, 22, 26, 31, 32 };
+
+    @functions{
+        public object Products(int ctg)
+        {
+            DB_EcommerceEntities db = new DB_EcommerceEntities();
+
+            var product = (from od in db.OrderDetails
+                           join o in db.Orders on od.OrderId equals o.OrderId
+                           join p in db.Products on od.ProductId equals p.ProductId
+                           join pm in db.ProductMedias on p.ProductId equals pm.ProductId
+                           where o.IsPay == true && p.CategoryId == ctg
+                           group od by new
+                           {
+                               ProductId = od.ProductId,
+                               ProductName = p.ProductName,
+                               Price = p.Price,
+                           }
+                           into pgroup
+                           let sum = pgroup.Sum(t => t.Quantity)
+                           orderby sum descending
+                           select new
+                           {
+                               ProductId = pgroup.Key.ProductId,
+                               ProductName = pgroup.Key.ProductName,
+                               Price = pgroup.Key.Price,
+                           }).Take(8).ToList();
+            return product;
+        }
+    }
+}
+
+<h2 class="title text-center">Çok Satan Ürünler</h2>
+<div class="category-tab activeTab">
+    <!--category-tab-->
+    <div class="col-sm-12">
+        <ul class="nav nav-tabs">
+            @for (int i = 0; i < catNums.Length; i++)
+            {
+                foreach (var item in cRep.List().ProcessResult.Where(t => t.CategoryId == catNums[i]))
+                {
+                   <li><a href="#tab_@i" data-toggle="tab">@item.CategoryName</a></li>
+                }
+            }
+        </ul>
+    </div>
+    <div class="tab-content">
+        @for (int i = 0; i < catNums.Length; i++)
+        {
+            ViewBag.PrdList = @Products(catNums[i]);
+
+            <div class="tab-pane fade in" id="tab_@i">
+                @foreach (var item in ViewBag.PrdList)
+                {
+                    pm.Photo = mr.List().ProcessResult.Where(t => t.ProductId == item.ProductId).First().Photo;
+                    <div class="col-sm-3">
+                        <div class="product-image-wrapper">
+                            <div class="single-products">
+                                <div class="productinfo text-center">
+                                    <a href="~/Home/ProductDetail/@item.ProductId">
+                                        <img src="~/Images/@pm.Photo" alt="" height="150" />
+                                    </a>
+                                    <h2>@string.Format("{0:#}₺", item.Price)</h2>
+                                    <a href="~/Home/ProductDetail/@item.ProductId"><p>@item.ProductName</p></a>
+                                    <a href="~/Order/Add/@item.ProductId" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Sepete Ekle</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</div><!--/category-tab-->

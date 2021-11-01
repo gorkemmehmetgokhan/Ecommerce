@@ -1,0 +1,56 @@
+﻿@using Ecommerce.Entity
+@model IEnumerable<InvoiceAddress>
+@{
+    ViewBag.Title = "AddressList";
+    Layout = "~/Views/Shared/_ProfileLayout.cshtml";
+}
+
+
+<form method="get" new { enctype="multipart/form-data" }>
+
+    <section id="cart_items">
+        <div class="review-payment">
+            <h2>Adreslerim</h2>
+        </div>
+
+        <div class="table-responsive cart_info">
+            <table class="table table-condensed">
+                <thead>
+                    <tr class="cart_menu">
+                        <td class="description">Adreş Başlığı</td>
+                        <td class="description">Açıklama</td>
+                        <td class="description">Telefon No</td>
+                        <td></td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in ViewBag.Address)
+                    {
+                        <tr>
+                            <td class="cart_description">
+                                @item.AddressHeader
+                            </td>
+                            <td class="cart_description">
+                                <p class="">@item.Description</p>
+                            </td>
+                            <td class="cart_description">
+                                <p class="">@item.Phone</p>
+                            </td>
+                            <td class="cart_delete">
+                                <a class="cart_quantity_delete" href="~/Profile/AddressDelete/@item.AddressId"><i class="fa fa-times"></i></a>
+                            </td>
+                        </tr>
+                    }
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>
+                            <a href="~/Profile/AddAddress" class="btn btn-fefault cart">Adres Ekle</a>                         
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+</form>

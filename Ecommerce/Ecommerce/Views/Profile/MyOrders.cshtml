@@ -1,0 +1,101 @@
+﻿@using Ecommerce.Entity
+@using Ecommerce.Repository
+@model  User
+
+    @{
+        ViewBag.Title = "MyOrders";
+        Layout = "~/Views/Shared/_ProfileLayout.cshtml";
+    }
+
+    <form method="get" new { enctype="multipart/form-data" }>
+        @{
+            DB_EcommerceEntities db = new DB_EcommerceEntities();
+
+            var query = from ord in db.Orders
+                        join od in db.OrderDetails on ord.OrderId equals od.OrderId
+                        join invoice in db.Invoices on od.OrderId equals invoice.OrderId
+                        join product in db.Products on od.ProductId equals product.ProductId                       
+                        join address in db.InvoiceAddresses on invoice.AddressId equals address.AddressId
+                        join payment in db.Payments on invoice.PaymentTypeId equals payment.PaymentId
+                        where ord.UserId == Model.UserId
+                        orderby ord.OrderId descending
+                        select new
+                        {
+                            ord.IsPay,
+                            ord.OrderDate,
+                            ord.OrderId,
+                            ord.TotalPrice,
+                            od.Quantity,
+                            od.Price,
+                            od.ProductId,
+                            invoice.PaymentDate,
+                            address.AddressHeader,
+                            address.Description,
+                            address.Phone,
+                            product.ProductName,  
+                            payment.PaymentName                         
+                        };
+
+            ViewBag.OrdList = query.ToList();
+        }
+
+        <section id="cart_items">
+            <div class="review-payment">
+                <h2>Siparişlerim</h2>
+            </div>
+
+            <div class="table-responsive cart_info">
+                <table class="table table-condensed">
+                    <thead>
+                        <tr class="cart_menu">
+                            <td class="image">Şipariş Kodu</td>
+                            <td class="image">Ürün</td>
+                            <td class="description">Ürün Adı / Miktarı</td>                           
+                            <td class="total">Toplam Fiyat</td>
+                            <td class="quantity">Sipariş Tarihi</td>
+                            <td class="description">Sipariş Adresi</td>
+                            <td class="price">Ödeme Şekli</td>
+                            <td></td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in ViewBag.OrdList)
+                        {
+                            MediaRepository mRep = new MediaRepository();
+                            ProductMedia pm = new ProductMedia();
+                            pm.Photo = mRep.List().ProcessResult.Where(t => t.ProductId == item.ProductId).Take(1).First().Photo.ToString();
+   
+                            <tr>
+                                <td class="cart_description">
+                                    <p class="">@item.OrderId</p>                                  
+                                </td>
+                                <td class="cart_description">
+                                    <a href=""><img src="~/Images/@pm.Photo" alt="" width="100" height="100"></a>
+                                </td>
+                                <td class="cart_description">
+                                    <h4><a href="">@item.ProductName</a></h4>
+                                    <div class="cart_quantity_button">
+                                        <input class="cart_quantity_input" type="text" name="quantity" value="@item.Quantity" autocomplete="off" size="2" readonly>
+                                    </div>
+                                </td>                             
+                                <td class="cart_description">
+                                    <p class="cart_total_price">@string.Format("{0:#}₺", item.Price)</p>
+                                </td>
+                                <td class="cart_description">
+                                    <p class="">@item.OrderDate</p>
+                                </td>
+                                <td class="cart_description">
+                                    <p class="">@item.AddressHeader</p>
+                                    <p class="">@item.Description</p>
+                                    <p class="">@item.Phone</p>
+                                </td>
+                                <td class="cart_description">
+                                    <h4>@item.PaymentName</h4>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </form>

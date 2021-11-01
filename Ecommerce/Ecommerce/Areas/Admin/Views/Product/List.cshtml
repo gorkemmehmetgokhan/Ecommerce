@@ -1,0 +1,37 @@
+﻿@using Ecommerce.Entity;
+@model IEnumerable<Product>
+
+@{
+    ViewBag.Title = "List";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<table class="table table-hover">
+    <tr>
+        <th>@Html.DisplayNameFor(t => t.ProductName)</th>
+        <th>@Html.DisplayNameFor(t => t.Price)</th>
+        <th>@Html.DisplayNameFor(t => t.Stock)</th>
+        <th>@Html.DisplayNameFor(t => t.BrandId)</th>
+        <th>@Html.DisplayNameFor(t => t.CategoryId)</th>
+        <th>@Html.DisplayNameFor(t => t.SupplierId)</th>
+        <th>@Html.DisplayNameFor(t => t.GenderId)</th>
+        <th>Edit</th>
+    </tr>
+    @foreach (Product item in Model)
+    {
+        <tr>
+            <td>@Html.DisplayFor(t => item.ProductName)</td>
+            <td>@Html.DisplayFor(t => item.Price)</td>
+            <td>@Html.DisplayFor(t => item.Stock)</td>
+            <td>@Html.DisplayFor(t => item.BrandId)</td>
+            <td>@Html.DisplayFor(t => item.CategoryId)</td>
+            <td>@Html.DisplayFor(t => item.SupplierId)</td> 
+            <td>@Html.DisplayFor(t => item.GenderId)</td>        
+            <td>
+                <a href="~/Admin/Product/Edit/@item.ProductId" class="btn btn-success">Edit</a>
+                <a href="~/Admin/Product/Delete/@item.ProductId" class="btn btn-danger">Delete</a>
+            </td>
+        </tr>
+    }
+</table>
+

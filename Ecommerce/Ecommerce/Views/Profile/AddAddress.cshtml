@@ -1,0 +1,23 @@
+﻿@using Ecommerce.Entity
+@model InvoiceAddress
+
+@{
+    ViewBag.Title = "AddAddress";
+    Layout = "~/Views/Shared/_ProfileLayout.cshtml";
+}
+
+<div class="col-sm-4" style="margin-left:450px;">
+    <div class="signup-form">
+        <!--sign up form-->
+        <h2>Yeni Adres</h2>
+        <form action="~/Profile/AddAddress" method="post">
+            <input type="text" name="AddressHeader" placeholder="Adres Başlığı" required />
+            <input type="text" name="Description" placeholder="Açıklama" required />
+            <input type="tel" name="Phone" placeholder="Telefon No" required />
+            <br />
+            <button type="submit" style="float:right" class="btn btn-default">Ekle</button>
+        </form>
+    </div><!--/sign up form-->
+</div>
+
+

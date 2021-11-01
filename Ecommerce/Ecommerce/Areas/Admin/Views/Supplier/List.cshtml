@@ -1,0 +1,28 @@
+﻿@using Ecommerce.Entity;
+@model IEnumerable<Supplier>
+
+
+@{
+    ViewBag.Title = "List";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<table class="table table-hover">
+    <tr class="active">
+        <td>@Html.DisplayNameFor(t => t.CompanyName)</td>
+        <td>Edit</td>
+    </tr>
+    @foreach (Supplier item in Model)
+    {
+        <tr>
+            <td>@item.CompanyName</td>
+           
+            <td>
+                <a href="~/Admin/Supplier/Edit/@item.SupplierId" class="btn btn-success">Edit</a>
+                <a href="~/Admin/Supplier/Delete/@item.SupplierId" class="btn btn-danger">Delete</a>
+            </td>
+        </tr>
+    }
+</table>
+
+

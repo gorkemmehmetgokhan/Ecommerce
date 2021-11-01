@@ -1,0 +1,69 @@
+﻿@using Ecommerce.Entity
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Profile</title>
+
+    <link href="~/Content/ECommerce/css/font-awesome.min.css" rel="stylesheet">
+    <link href="~/Content/ECommerce/css/prettyPhoto.css" rel="stylesheet">
+    <link href="~/Content/ECommerce/css/price-range.css" rel="stylesheet">
+    <link href="~/Content/ECommerce/css/animate.css" rel="stylesheet">
+    <link href="~/Content/ECommerce/css/main.css" rel="stylesheet" />
+    <link href="~/Content/ECommerce/css/responsive.css" rel="stylesheet">
+    <script src="~/scripts/jquery-3.3.1.min.js"></script>
+    <script src="~/scripts/bootstrap.min.js"></script>
+    <link href="~/Content/ECommerce/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/ECommerce/css/profileStyle.css" rel="stylesheet" />
+</head>
+<body>
+    <nav class="navbar navbar-default sidebar" role="navigation" style="float:left">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-sidebar-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </div>
+            <div class="collapse navbar-collapse" id="bs-sidebar-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="~/Home/Index">Anasayfa<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-home"></span></a></li>
+                    <li class="dropdown">
+                        @{
+                            DB_EcommerceEntities db = new DB_EcommerceEntities();
+
+                            if (User.Identity.IsAuthenticated)
+                            {
+                                User user = new User();
+                                int id = Convert.ToInt32(User.Identity.Name);
+
+                                user.Username = db.Users.Where(x => x.UserId == id).Select(x => x.Username).First().ToString();
+
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">@user.Username <span class="caret"></span><span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-user"></span></a>
+                            }}
+                        <ul class="dropdown-menu forAnimate" role="menu">
+                            <li><a href="~/Profile/EditPassword/@User.Identity.Name">Şifremi Değiştir</a></li>
+                            <li class="divider"></li>
+                            <li><a href="~/Profile/AddressList">Adreslerim</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="~/Profile/MyOrders/@User.Identity.Name">Siparişlerim<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-shopping-cart"></span></a></li>
+                    <li><a href="~/Home/LogOut">Çıkış Yap<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-log-out"></span></a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <section style="padding:20px;margin-left:200px">
+        @RenderBody()
+    </section>
+</body>
+</html>

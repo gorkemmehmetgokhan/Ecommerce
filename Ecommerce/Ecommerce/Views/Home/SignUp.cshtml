@@ -1,0 +1,32 @@
+﻿@using Ecommerce.Entity
+@model IEnumerable<User>
+
+@{
+    ViewBag.Title = "SignUp";
+    Layout = "~/Views/Shared/_DefaultLayout.cshtml";
+}
+
+<div class="col-sm-4" style="margin-left:450px;">
+    <div class="signup-form">
+        <!--sign up form-->
+        <h2>Hemen Üye Ol!</h2>
+        <form action="~/Home/SignUp" method="post">
+            <input type="text" name="Fullname" placeholder="Ad Soyad" required/>
+            <input type="email" name="Email" placeholder="Email" required/>
+            <input type="text" name="Username" placeholder="Kullanıcı Adı" required/>
+            <input type="password" name="Password" placeholder="Şifre"  required/>           
+            
+            <div class="radios">
+                <label class="label_radio col-lg-2 col-sm-2" for="radio-01">
+                    <input name="sampleradio" id="radioMale" value="Male" type="radio" checked /> Erkek
+                </label>
+                <label class="label_radio col-lg-2 col-sm-2" for="radio-02">
+                    <input name="sampleradio" id="radioFemale" value="Female" type="radio" /> Kadın
+                </label>
+            </div>
+           <br />
+            <button type="submit" style="float:right" class="btn btn-default">Üye Ol</button>
+        </form>
+    </div><!--/sign up form-->
+</div>
+

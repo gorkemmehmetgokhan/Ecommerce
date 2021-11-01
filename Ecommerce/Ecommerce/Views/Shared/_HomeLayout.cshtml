@@ -1,0 +1,494 @@
+﻿@using Ecommerce.Repository
+@using Ecommerce.Entity
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Home | E-Shopper</title>
+    <link href="~/Content/ECommerce/css/bootstrap.min.css" rel="stylesheet">
+    <link href="~/Content/ECommerce/css/font-awesome.min.css" rel="stylesheet">
+    <link href="~/Content/ECommerce/css/prettyPhoto.css" rel="stylesheet">
+    <link href="~/Content/ECommerce/css/price-range.css" rel="stylesheet">
+    <link href="~/Content/ECommerce/css/animate.css" rel="stylesheet">
+    <link href="~/Content/ECommerce/css/main.css" rel="stylesheet" />
+    <link href="~/Content/ECommerce/css/responsive.css" rel="stylesheet">
+    <link href="~/Content/ECommerce/css/menuStyle.css" rel="stylesheet" />
+    <!--flexslider-->
+    <link rel="stylesheet" href="~/Content/shopx/assets/plugins/css/flexslider.min.css">
+    <link rel="stylesheet" href="~/Content/shopx/assets/css/slider.css">
+
+
+    <!--[if lt IE 9]>
+    <script src="js/html5shiv.js"></script>
+    <script src="js/respond.min.js"></script>
+    <![endif]-->
+    <link rel="shortcut icon" href="images/ico/favicon.ico">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="~/Content/ECommerce/images/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="~/Content/ECommerce/images/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="~/Content/ECommerce/images/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" href="~/Content/ECommerce/images/ico/apple-touch-icon-57-precomposed.png">
+
+</head><!--/head-->
+<body>
+    <header id="header">
+        <!--header-->
+        <div class="header-middle">
+            <!--header-middle-->
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="logo pull-left">                         
+                            <a href="~/Home/Index"><img src="~/Images/shopperlogo.png" /></a>                           
+                        </div>
+                        <div class="btn-group pull-right">
+
+                        </div>
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="shop-menu pull-right">
+
+                            <ul class="nav navbar-nav">
+                                @{
+                                    DB_EcommerceEntities db = new DB_EcommerceEntities();
+
+                                    if (User.Identity.IsAuthenticated)
+                                    {
+                                        User user = new User();
+                                        int id = Convert.ToInt32(User.Identity.Name);
+                                        user.Username = db.Users.Where(x => x.UserId == id).Select(x => x.Username).First().ToString();
+
+                                        <div class="dropdown" style="float:left;margin-top:10px">
+                                            <a href="#" class="">@user.Username<i class="fa fa-angle-down"></i></a>
+                                            <div class="dropdown-content">
+                                                <a href="~/Profile/MyOrders/@User.Identity.Name">Profilim</a>
+                                                <a href="~/Profile/MyOrders/@User.Identity.Name">Siparişlerim</a>
+                                                <a href="~/Home/LogOut">Çıkış Yap</a>
+                                            </div>
+                                        </div>
+                                    }
+
+                                    Order ord = (Order)Session["Order"];
+                                    int? adet = 0;
+                                    decimal? TotalPrice = 0;
+                                    if (ord != null)
+                                    {
+                                        foreach (OrderDetail item in ord.OrderDetails)
+                                        {
+                                            adet += item.Quantity;
+                                            TotalPrice += item.Price;
+                                        }
+                                    }
+                                    <li><a href="~/Order/DetailList"><i class="fa fa-shopping-cart"></i> Sepetim( @Html.Label(adet.ToString()) )</a></li>
+
+                                    if (!User.Identity.IsAuthenticated)
+                                    {
+                                        <li><a href="~/Home/Login"><i class="fa fa-lock"></i> Giriş Yap</a></li>
+                                        <li><a href="~/Home/SignUp"><i class="fa fa-sign-in"></i> Üye Ol</a></li>
+                                    }
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div><!--/header-middle-->
+
+        <div class="header-bottom">
+            <!--header-bottom-->
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-9">
+                        <div class="navbar-header">
+                            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                                <span class="sr-only">Toggle navigation</span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                            </button>
+                        </div>
+                        <div class="mainmenu pull-left">
+                            <ul class="nav navbar-nav collapse navbar-collapse">
+                                <li><a href="~/Home/Index" class="active">Anasayfa</a></li>
+                                <li class="dropdown">
+                                    <a href="#">Ürünler<i class="fa fa-angle-down"></i></a>
+                                    <ul role="menu" class="sub-menu">
+                                        <li><a href="~/Home/AllProducts">Tüm Ürünler</a></li>
+                                    </ul>
+                                </li>
+                                <li><a href="~/Home/ListByGender/1">Erkek</a></li>
+                                <li><a href="~/Home/ListByGender/2">Kadın</a></li>
+                                <li><a href="~/Home/ListByGender/3">Çocuk</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+
+                        @using (Html.BeginForm("Search", "Home", FormMethod.Get))
+                        {
+                            <div class="search_box pull-right">
+                                <input type="search" name="searchProduct" class="form-control" placeholder="Hemen Ürün Ara.." required />
+                            </div>
+                        }
+
+                    </div>
+                </div>
+            </div>
+        </div><!--/header-bottom-->
+    </header><!--/header-->
+
+    <section class="xt-slider">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3 category-hidden padding-right-o"></div>
+                <div class="col-md-12">
+                    <div class="flexslider xt-slider-inner">
+                        <ul class="slides">
+                            @{
+                                SliderRepository sRep = new SliderRepository();
+
+                                foreach (var item in sRep.List().ProcessResult)
+                                {
+                                    <li>
+                                        <a href="~/Home/ListByCategory/@item.CategoryId"><img src="~/Images/@item.Photo" alt="" /></a>
+                                    </li>
+                                }
+                            }
+                        </ul>
+                    </div>
+                    <div class="flexslider-controls">
+                        <ol class="flex-control-nav">
+                            @{
+                                foreach (var item in sRep.List().ProcessResult)
+                                {
+                                    <li>
+                                        <img src="~/Images/@item.Photo" width="100" height="100" alt="" />
+                                        <div class="nav-title">
+                                            <span>@item.SliderHeader</span>
+                                            <h3>@item.Description</h3>
+                                        </div>
+                                    </li>
+                                }
+                            }
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <br />
+    <section>
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-3">
+                    <div class="left-sidebar">
+
+                        <header class="panel-heading">
+                            <h2>Kategoriler</h2>
+                        </header>
+                        <section class="panel panel-default">
+                            <div class="panel-body">
+                                <ul class="nav prod-cat" id="nav-accordion">
+                                    @{
+                                        DB_EcommerceEntities con = new DB_EcommerceEntities();
+                                    }
+
+                                    @foreach (Category k in con.Categories.OrderByDescending(x => x.CategoryName).Where(x => x.ParentId == 14))
+                                    {
+                                        <li>
+                                            <a href="javascript:;"><i class="fa fa-plus right"></i> @k.CategoryName</a>
+
+                                            @foreach (Category l in con.Categories)
+                                            {
+                                                if (k.CategoryId == l.ParentId)
+                                                {
+                                                    <ul class="nav">
+                                                        <li class="active"><a href="/Home/ListByCategory/@l.CategoryId" style="color:darkblue">-@l.CategoryName</a></li>
+                                                    </ul>
+                                                }
+                                            }
+                                        </li>
+                                    }
+                                </ul>
+                            </div>
+                            <div class="">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title"><a href="~/Home/ListByGender/1">Erkek</a></h4>
+                                </div>
+                                <div class="panel-heading">
+                                    <h4 class="panel-title"><a href="~/Home/ListByGender/2">Kadın</a></h4>
+                                </div>
+                                <div class="panel-heading">
+                                    <h4 class="panel-title"><a href="~/Home/ListByGender/3">Çocuk</a></h4>
+                                </div>
+                            </div>
+                        </section>
+
+                        @{
+                            BrandRepository br = new BrandRepository();
+                        }
+
+                        <h2>Markalar</h2>
+                        <div class="panel panel-default">
+                            <!--brands_products-->
+                            <div class="brands-name">
+                                @foreach (Brand item in br.List().ProcessResult.OrderByDescending(t => t.ProductCount))
+                                {
+
+                                    <ul class="nav nav-pills nav-stacked">
+                                        <li><a href="~/Home/ListByBrand/@item.BrandId"> <span class="pull-right">(@item.ProductCount)</span>@item.BrandName</a></li>
+                                    </ul>
+
+                                }
+                            </div>
+                        </div><!--/brands_products-->
+
+                        <div class="price-range">
+                            <!--price-range-->
+                            <h2>Fiyat Aralığı</h2>                          
+                                @using (Html.BeginForm("SearchByPrice", "Home", FormMethod.Get))
+                                {
+                                    <input type="number" placeholder="Min" class="resizedInput" name="PriceMin" min="0" value="0" required />
+                                    <input type="number" placeholder="Max" class="resizedInput" name="PriceMax" min="0" required />
+                                    <input type="submit" class="btn btn-success" value="Ara" />                                   
+                                }                         
+                            </div><!--/price-range-->                                
+                    </div>
+                </div>
+
+                <div class="col-sm-9 padding-right">
+
+                    @RenderBody()
+
+                    <div class="recommended_items">
+                        <!--recommended_items-->
+                        <h2 class="title text-center">Önerilen Ürünler</h2>
+
+                        <div id="recommended-item-carousel" class="carousel slide" data-ride="carousel">
+                            <div class="carousel-inner">
+                                <div class="item active">
+                                    @{    
+                                        DB_EcommerceEntities context = new DB_EcommerceEntities();
+                                        MediaRepository mRep = new MediaRepository();
+                                        ProductRepository pRep = new ProductRepository();
+
+                                        foreach (var item in pRep.List().ProcessResult.OrderBy(x=>Guid.NewGuid()).Take(3))
+                                        {
+                                            var pic1 = mRep.List().ProcessResult.Where(t => t.ProductId == item.ProductId).First().Photo;
+                                            var pic2 = mRep.List().ProcessResult.Where(t => t.ProductId == item.ProductId).Skip(1).First().Photo;
+                                            var pic3 = mRep.List().ProcessResult.Where(t => t.ProductId == item.ProductId).Skip(2).First().Photo;
+
+                                            <div class="col-sm-4">
+                                                <div class="product-image-wrapper">
+                                                    <div class="single-products">
+                                                        <div class="productinfo text-center">
+                                                            @if (pic1 != 0.ToString() && pic2 != 0.ToString() && pic3 != 0.ToString())
+                                                            {
+                                                                <a href="~/Home/ProductDetail/@item.ProductId"><img src="~/Images/@pic1" alt="" width="200" height="200" /></a>
+                                                            }
+                                                            else if (pic1 != 0.ToString() && pic2 != 0.ToString() && pic3 == 0.ToString())
+                                                            {
+                                                            <a href="~/Home/ProductDetail/@item.ProductId"><img src="~/Images/@pic1" alt="" width="200" height="200" /></a>
+                                                            }
+                                                            else if (pic1 != 0.ToString() && pic2 == 0.ToString() && pic3 == 0.ToString())
+                                                            {
+                                                                <a href="~/Home/ProductDetail/@item.ProductId"><img src="~/Images/@pic1" alt="" width="200" height="200" /></a>
+                                                            }
+                                                            else if (pic1 == 0.ToString() && pic2 == 0.ToString() && pic3 == 0.ToString())
+                                                            {
+                                                                <a href="~/Home/ProductDetail/@item.ProductId"><img src="~/Images/urungorseli.jpg" alt="" width="200" height="200" /></a>
+                                                            }
+                                                            
+                                                            <h2>@(string.Format("{0:#}₺", item.Price))</h2>
+                                                            <p>@item.ProductName</p>
+                                                            <a href="~/Order/Add/@item.ProductId" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Sepete Ekle</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                    }
+                                </div>
+                                <div class="item">
+                                @foreach (var item in pRep.List().ProcessResult.OrderBy(x=>Guid.NewGuid()).Take(3))
+                                {
+                                    var pic1 = mRep.List().ProcessResult.Where(t => t.ProductId == item.ProductId).First().Photo;
+                                    var pic2 = mRep.List().ProcessResult.Where(t => t.ProductId == item.ProductId).Skip(1).First().Photo;
+                                    var pic3 = mRep.List().ProcessResult.Where(t => t.ProductId == item.ProductId).Skip(2).First().Photo;
+
+                                     <div class="col-sm-4">
+                                        <div class="product-image-wrapper">
+                                            <div class="single-products">
+                                                <div class="productinfo text-center">
+                                                    @if (pic1 != 0.ToString() && pic2 != 0.ToString() && pic3 != 0.ToString())
+                                                    {
+                                                        <a href="~/Home/ProductDetail/@item.ProductId"><img src="~/Images/@pic1" alt="" width="200" height="200" /></a>
+                                                    }
+                                                    else if (pic1 != 0.ToString() && pic2 != 0.ToString() && pic3 == 0.ToString())
+                                                    {
+                                                        <a href="~/Home/ProductDetail/@item.ProductId"><img src="~/Images/@pic1" alt="" width="200" height="200" /></a>
+                                                    }
+                                                    else if (pic1 != 0.ToString() && pic2 == 0.ToString() && pic3 == 0.ToString())
+                                                    {
+                                                        <a href="~/Home/ProductDetail/@item.ProductId"><img src="~/Images/@pic1" alt="" width="200" height="200" /></a>
+                                                    }
+                                                    else if (pic1 == 0.ToString() && pic2 == 0.ToString() && pic3 == 0.ToString())
+                                                    {
+                                                        <a href="~/Home/ProductDetail/@item.ProductId"><img src="~/Images/urungorseli.jpg" alt="" width="200" height="200" /></a>
+                                                    }
+
+                                                    <h2>@(string.Format("{0:#}₺", item.Price))</h2>
+                                                    <p>@item.ProductName</p>
+                                                    <a href="~/Order/Add/@item.ProductId" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Sepete Ekle</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    }
+                                </div>
+                            </div>
+                            <a class="left recommended-item-control" href="#recommended-item-carousel" data-slide="prev">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                            <a class="right recommended-item-control" href="#recommended-item-carousel" data-slide="next">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        </div>
+                        <!--/recommended_items-->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer id="footer">
+        <!--Footer-->
+        @{
+            CategoryRepository ctg = new CategoryRepository();
+            BrandRepository brand = new BrandRepository();
+            SupplierRepository supplier = new SupplierRepository();
+
+            var productList = (from od in db.OrderDetails
+                               join o in db.Orders on od.OrderId equals o.OrderId
+                               join p in db.Products on od.ProductId equals p.ProductId
+                               join pm in db.ProductMedias on p.ProductId equals pm.ProductId
+                               where o.IsPay == true
+                               group od by new
+                               {
+                                   ProductId = od.ProductId,
+                                   ProductName = p.ProductName,
+                                   Price = p.Price,
+                               }
+                               into pgroup
+                               let sum = pgroup.Sum(t => t.Quantity)
+                               orderby sum descending
+                               select new
+                               {
+                                   ProductId = pgroup.Key.ProductId,
+                                   ProductName = pgroup.Key.ProductName,
+                                   Price = pgroup.Key.Price,
+                               }).Take(15).ToList();
+
+            ViewBag.PrdList = productList;
+
+        }
+
+        <div class="footer-widget">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-2">
+                        <div class="single-widget">
+                            <h2>Kategoriler</h2>
+                            <ul class="nav nav-pills nav-stacked">
+                                @foreach (var item in ctg.List().ProcessResult.Where(t => t.ParentId != 14 && t.ParentId != null).Take(15))
+                                {
+                                    <li><a href="~/Home/ListByCategory/@item.CategoryId">@item.CategoryName</a></li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="single-widget">
+                            <h2>Markalar</h2>
+                            <ul class="nav nav-pills nav-stacked">
+                                @foreach (var item in brand.List().ProcessResult.Take(15))
+                                {
+                                    <li><a href="~/Home/ListByBrand/@item.BrandId">@item.BrandName</a></li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="single-widget">
+                            <h2>Çok Satan Ürünler</h2>
+                            <ul class="nav nav-pills nav-stacked">
+                                @foreach (var item in ViewBag.PrdList)
+                                {
+                                    <li><a href="/Home/ProductDetail/@item.ProductId">@item.ProductName</a></li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="single-widget">
+                            <h2>Mağazalar</h2>
+                            <ul class="nav nav-pills nav-stacked">
+                                @foreach (var item in supplier.List().ProcessResult.Take(15))
+                                {
+                                    <li><a href="/Home/ListBySupplier/@item.SupplierId">@item.CompanyName</a></li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-sm-3 col-sm-offset-1">                                             
+                        <img src="~/Images/kargo.png" width="300"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <div class="container">
+                <div class="row">
+                    <p class="pull-left">Copyright © 2018 E-SHOPPER Inc. All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer><!--/Footer-->
+
+    <script src="~/Content/ECommerce/js/jquery.js"></script>
+    <script src="~/Content/ECommerce/js/bootstrap.min.js"></script>
+    <script src="~/Content/ECommerce/js/jquery.scrollUp.min.js"></script>
+    <script src="~/Content/ECommerce/js/price-range.js"></script>
+    <script src="~/Content/ECommerce/js/jquery.prettyPhoto.js"></script>
+    <script src="~/Content/ECommerce/js/main.js"></script>
+    <script src="~/Content/ECommerce/js/cookiejquery.js"></script>
+    <script src="~/Content/ECommerce/js/hoverdropdown.js"></script>
+    <script src="~/Content/ECommerce/js/accordion.js"></script>
+    <script src="~/Content/ECommerce/js/common.js"></script>
+    <!--flexslider-->
+    <script src="~/Content/shopx/assets/plugins/js/jquery.flexslider-min.js"></script>
+    <!-- init -->
+    <script src="~/Content/shopx/assets/js/init.js"></script>
+
+    <style>
+        .resizedInput {
+            width: 85px;
+            height: 40px;
+        }
+    </style>
+    <script>
+        $(document).ready(function () {
+            $(".activeTab div ul li:eq(0)").addClass("active");
+            $("#tab_0").addClass("active");
+        });
+    </script>
+</body>
+</html>

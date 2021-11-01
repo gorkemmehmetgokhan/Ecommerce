@@ -1,0 +1,30 @@
+﻿@using Ecommerce.Entity;
+@model IEnumerable<Slider>
+
+@{
+    ViewBag.Title = "List";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<table class="table table-hover">
+    <tr>   
+        <th>@Html.DisplayNameFor(t => t.CategoryId)</th>
+        <th>@Html.DisplayNameFor(t => t.SliderHeader)</th>
+        <th>@Html.DisplayNameFor(t => t.Description)</th>
+        <th>@Html.DisplayNameFor(t => t.Photo)</th>       
+        <th>Edit</th>
+    </tr>
+    @foreach (Slider item in Model)
+    {
+        <tr>           
+            <td>@Html.DisplayFor(t => item.CategoryId)</td>        
+            <td>@Html.DisplayFor(t => item.SliderHeader)</td>
+            <td>@Html.DisplayFor(t => item.Description)</td>
+            <td><img src="~/Images/@item.Photo" class="pro-img-box" style="width:100px" height="100" /></td>            
+            <td>
+                <a href="~/Admin/Slider/EditSlider/@item.SliderId" class="btn btn-success">Edit</a>
+                <a href="~/Admin/Slider/Delete/@item.SliderId" class="btn btn-danger">Delete</a>
+            </td>
+        </tr>
+    }
+</table>
